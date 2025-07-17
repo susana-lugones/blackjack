@@ -44,7 +44,6 @@ public final class CommandsTests {
             var result = Assertions.assertDoesNotThrow(() -> commands.execute(Lisp.parse("(inspect :deck)")));
             var cards = Set.of(result.replace("Deck: ", "").split(", "));
             Assertions.assertEquals(52, cards.size());
-            //Note: This test doesn't account for random behavior - make sure to check for that!
         }
 
     }
@@ -264,14 +263,6 @@ public final class CommandsTests {
         Assertions.assertDoesNotThrow(() -> commands.execute(Lisp.parse("(do " + setup + ")")));
         if (expected != null) {
             var result = Assertions.assertDoesNotThrow(() -> commands.execute(Lisp.parse(command)));
-            //Note: We use stripTrailing() to remove whitespace at the end of
-            //the expected value (specifically, the newline resulting from
-            //having the closing """ on a separate line for readable). We then
-            //use stripIndent() in case the content is indented further than the
-            //closing quotes (which was the issue with the original tests, but
-            //fixed above). This is what we will use when grading submissions.
-            //Note(2): Our Lisp parser ignores whitespace, so it doesn't mind
-            //any extraneous indentation or newlines already.
             Assertions.assertEquals(expected.stripTrailing().stripIndent(), result.stripTrailing().stripIndent());
         } else {
             var error = Assertions.assertDoesNotThrow(() -> commands.execute(Lisp.parse("(inspect :error)")));
